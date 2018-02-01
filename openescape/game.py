@@ -20,6 +20,9 @@ class Game:
 
 		while True:
 			for event in pygame.event.get():
-				if event.type == pygame.QUIT:
-					pygame.quit()
-					sys.exit()
+				if (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE) or event.type == pygame.QUIT:
+					self.exit()
+
+	def exit(self):
+		pygame.quit()
+		sys.exit()
