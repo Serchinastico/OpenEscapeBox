@@ -6,6 +6,7 @@ class Game:
 		self.countdown_timer = countdown_timer
 		self.countdown_timer.subscribe(self)
 		self.display = display
+		self.clock = pygame.time.Clock()
 
 	def on_tick(self, data):
 		remaining_time_ms = data['remaining_time_ms']
@@ -22,6 +23,8 @@ class Game:
 			for event in pygame.event.get():
 				if (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE) or event.type == pygame.QUIT:
 					self.exit()
+
+			self.clock.tick(60)
 
 	def exit(self):
 		pygame.quit()
