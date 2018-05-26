@@ -22,24 +22,24 @@ conditions:
   button-pressed:
     type: BUTTON_PRESSED
     value: button-1
-  30-seconds-passed-condition:
+  30-seconds-remaining-condition:
     type: SECONDS_REMAINING
     value: 30
-  45-seconds-passed-condition:
+  15-seconds-remaining-condition:
     type: SECONDS_REMAINING
-    value: 45
-  60-seconds-passed-condition:
+    value: 15
+  0-seconds-remaining-condition:
     type: SECONDS_REMAINING
-    value: 60
+    value: 0
 checkpoints:
 triggers:
   - enableConditionId:
     disableConditionId: button-pressed
-    triggerConditionId: 30-seconds-passed-condition
+    triggerConditionId: 30-seconds-remaining-condition
     actionIds: [hint-available]
   - enableConditionId:
     disableConditionId: button-pressed
-    triggerConditionId: 45-seconds-passed-condition
+    triggerConditionId: 15-seconds-remaining-condition
     actionIds: [hint-critical]
   - enableConditionId:
     disableConditionId:
@@ -47,11 +47,11 @@ triggers:
     actionIds: [game-won]
   - enableConditionId:
     disableConditionId:
-    triggerConditionId: 60-seconds-passed-condition
+    triggerConditionId: 0-seconds-remaining-condition
     actionIds: [game-lost]
 components:
-  - id: button-1
-    type: button
+  button-1:
+    type: BUTTON
     device: /dev/tty1
     inputPin: d3
 

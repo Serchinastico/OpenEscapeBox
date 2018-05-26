@@ -1,4 +1,5 @@
 from openescape.actions import *
+from openescape.components import *
 from openescape.conditions import *
 from openescape.triggers import *
 
@@ -7,6 +8,7 @@ class Game:
 		self.__game_config = game_config
 		self.__seconds_remaining = game_config.duration_seconds()
 		self.__init_actions()
+		self.__init_components()
 		self.__init_conditions()
 		self.__init_triggers()
 
@@ -22,6 +24,18 @@ class Game:
 	def seconds_remaining(self):
 		return self.__seconds_remaining
 
+	def set_hint_available(self, image_url):
+		pass
+
+	def set_hint_critical(self):
+		pass
+
+	def trigger_loss(self):
+		pass
+
+	def trigger_victory(self):
+		pass
+
 	def set_seconds_remaining(self, seconds_remaining):
 		self.__seconds_remaining = seconds_remaining
 
@@ -33,10 +47,32 @@ class Game:
 
 			action_type = action_data.get('type')
 			action_config = action_data.get('config')
-			if action_type == 'TURN_LIGHT_ON':
-				self.__actions[id] = TurnLightOnAction(action_config)
+			if action_type == 'GAME_LOSS':
+				self.__actions[id] = GameLossAction(self, action_config)
+			elif action_type == 'GAME_VICTORY':
+				self.__actions[id] = GameVictoryAction(self, action_config)
+			elif action_type == 'HINT_AVAILABLE':
+				self.__actions[id] = HintAvailableAction(self, action_config)
+			elif action_type == 'HINT_CRITICAL':
+				self.__actions[id] = HintCriticalAction(self, action_config)
+			elif action_type == 'TURN_LIGHT_ON':
+				self.__actions[id] = TurnLightOnAction(self, action_config)
 			else:
 				print('Unrecognized action type [{}]'.format(action_type))
+
+	def __init_components(self):
+		self.__components = {}
+		for id, component_data in self.__game_config.components().items():
+			if id in self.__components:
+				print('Duplicated component [{}]'.format(id))
+
+			component_type = component_data.get('type')
+			component_device = component_data.get('device')
+			component_input_pin = component_data.get('inputPin')
+			if component_type == 'BUTTON':
+				self.__components[id] = ButtonComponent(component_device, component_input_pin)
+			else:
+				print('Unrecognized component type [{}]'.format(component_type))
 
 	def __init_conditions(self):
 		self.__conditions = {}
@@ -46,7 +82,9 @@ class Game:
 
 			condition_type = condition_data.get('type')
 			condition_value = condition_data.get('value')
-			if condition_type == 'SECONDS_REMAINING':
+			if condition_type == 'BUTTON_PRESSED':
+				self.__conditions[id] = ButtonPressedCondition(self, self.__components[condition_value])
+			elif condition_type == 'SECONDS_REMAINING':
 				self.__conditions[id] = SecondsRemainingCondition(self, condition_value)
 			else:
 				print('Unrecognized condition type [{}]'.format(condition_type))
@@ -54,8 +92,8 @@ class Game:
 	def __init_triggers(self):
 		self.__triggers = []
 		for trigger_data in self.__game_config.triggers():
-			enable_condition = self.__conditions[trigger_data['enableConditionId']]
-			disable_condition = self.__conditions[trigger_data['disableConditionId']]
-			trigger_condition = self.__conditions[trigger_data['triggerConditionId']]
+			enable_condition = self.__conditions.get(trigger_data['enableConditionId'], AlwaysTrueCondition())
+			disable_condition = self.__conditions.get(trigger_data['disableConditionId'], AlwaysFalseCondition())
+			trigger_condition = self.__conditions.get(trigger_data['triggerConditionId'], AlwaysTrueCondition())
 			actions = map(self.__actions.get, trigger_data['actionIds'])
 			self.__triggers.append(Trigger(enable_condition, disable_condition, trigger_condition, actions))
