@@ -1,0 +1,31 @@
+---
+
+title: Simple Game
+description: A simple game
+author: openescape
+specVersion: 1
+durationSeconds: 60
+hints:
+actions:
+  turn-light-on:
+    type: TURN_LIGHT_ON
+    config:
+conditions:
+  15-seconds-passed-condition:
+    type: SECONDS_REMAINING
+    value: 15
+  20-seconds-passed-condition:
+    type: SECONDS_REMAINING
+    value: 20
+  40-seconds-passed-condition:
+    type: SECONDS_REMAINING
+    value: 40
+checkpoints:
+triggers:
+  - enableConditionId: 20-seconds-passed-condition
+    disableConditionId: 40-seconds-passed-condition
+    triggerConditionId: 15-seconds-passed-condition
+    actionIds: [turn-light-on]
+components:
+
+...
