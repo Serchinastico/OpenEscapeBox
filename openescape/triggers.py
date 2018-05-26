@@ -14,4 +14,4 @@ class Trigger(object):
 			for action in self.__actions:
 				action.execute()
 
-		self.__done = True
+			self.__done = True

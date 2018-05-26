@@ -11,20 +11,20 @@ actions:
     type: TURN_LIGHT_ON
     config:
 conditions:
-  15-seconds-passed-condition:
+  53-seconds-passed-condition:
     type: SECONDS_REMAINING
-    value: 15
-  20-seconds-passed-condition:
+    value: 53
+  55-seconds-passed-condition:
     type: SECONDS_REMAINING
-    value: 20
+    value: 55
   40-seconds-passed-condition:
     type: SECONDS_REMAINING
     value: 40
 checkpoints:
 triggers:
-  - enableConditionId: 20-seconds-passed-condition
+  - enableConditionId: 55-seconds-passed-condition
     disableConditionId: 40-seconds-passed-condition
-    triggerConditionId: 15-seconds-passed-condition
+    triggerConditionId: 53-seconds-passed-condition
     actionIds: [turn-light-on]
 components:
 

@@ -1,19 +1,20 @@
 import pygame
 import sys
 import timer
+from openescape.game import Game
 
 class Engine(object):
 	def __init__(self):
 		self.clock = pygame.time.Clock()
 
 	def start_game(self, game_config):
+		self.__game = Game(game_config)
+
 		self.countdown_timer = timer.CountdownTimer(game_config.duration_seconds() * 1000)
 		self.countdown_timer.subscribe(self)
 
 		print('Starting game [{}]'.format(game_config.title()))
 		self.countdown_timer.start()
-
-		self.__game_config = game_config
 
 		while True:
 			for event in pygame.event.get():
@@ -23,10 +24,11 @@ class Engine(object):
 				self.clock.tick(60)
 
 	def on_tick(self, data):
-		remaining_time_ms = data['remaining_time_ms']
+		seconds_remaining = data['remaining_time_ms'] // 1000
+		self.__game.set_seconds_remaining(seconds_remaining)
 
-		print('Time remaining: {} seconds'.format(remaining_time_ms // 1000))
-		for trigger in self.__game_config.triggers():
+		print('Time remaining: {} seconds'.format(seconds_remaining))
+		for trigger in self.__game.triggers():
 			trigger.evaluate()
 
 	def exit(self):

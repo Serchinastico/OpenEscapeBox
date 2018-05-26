@@ -1,18 +1,18 @@
 import serial
-import time
-import os
-
+from openescape.environment import environment
 
 class Action(object):
     def execute(self):
         pass
 
-
 class TurnLightOnAction(Action):
     def __init__(self, config):
-        self.connection = serial.Serial('/dev/ttyACM0', 57600)
-        pass
+    	if not environment.is_development:
+        	self.connection = serial.Serial('/dev/ttyACM0', 57600)
 
     def execute(self):
-        self.connection.write("d13=1")
-        self.connection.flush()
+    	if environment.is_development:
+    		print('Turn light on')
+    	else:
+    		self.connection.write("d13=1")
+    		self.connection.flush()
