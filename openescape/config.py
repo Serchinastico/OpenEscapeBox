@@ -19,6 +19,9 @@ class GameConfig(object):
 	def actions(self):
 		return self.__config.get('actions')
 
+	def components(self):
+		return self.__config.get('components')
+
 	def conditions(self):
 		return self.__config.get('conditions')
 

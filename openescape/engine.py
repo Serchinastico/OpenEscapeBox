@@ -5,11 +5,12 @@ from openescape.game import Game
 
 
 class Engine(object):
-    def __init__(self):
+    def __init__(self, arduino):
         self.clock = pygame.time.Clock()
+        self.__arduino = arduino
 
     def start_game(self, game_config):
-        self.__game = Game(game_config)
+        self.__game = Game(game_config, self.__arduino)
 
         self.countdown_timer = timer.CountdownTimer(
             game_config.duration_seconds() * 1000)
