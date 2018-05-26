@@ -24,7 +24,7 @@ class Engine(object):
                 if (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE) or event.type == pygame.QUIT:
                     self.exit()
 
-            for component in self.__game.components():
+            for component in self.__game.components().values():
                 component.update()
 
             self.clock.tick(60)

@@ -4,19 +4,25 @@ from openescape.environment import environment
 
 class Action(object):
     def __init__(self, game, config):
-        pass
+        self.__game = game
 
     def execute(self):
         pass
 
 
 class GameVictoryAction(Action):
+    def __init__(self, game, config):
+        self.__game = game
+
     def execute(self):
         print('Game victory!')
         self.__game.trigger_victory()
 
 
 class GameLossAction(Action):
+    def __init__(self, game, config):
+        self.__game = game
+
     def execute(self):
         print('Game lost :(')
         self.__game.trigger_loss()

@@ -17,7 +17,7 @@ class Arduino(object):
             value_so_far += next_character
             next_character = self.__connection.read()
 
-        print('value: {}'.format(value_so_far.strip()[1:]))
+        value_so_far = value_so_far.strip()[1:]
         return value_so_far
 
     def write(self, pin, value):

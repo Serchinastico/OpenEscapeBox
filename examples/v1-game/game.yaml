@@ -52,6 +52,6 @@ triggers:
 components:
   button-1:
     type: BUTTON
-    inputPin: d3
+    inputPin: d12
 
 ...

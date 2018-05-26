@@ -17,6 +17,9 @@ class Game:
     def actions(self):
         return self.__actions
 
+    def components(self):
+        return self.__components
+
     def conditions(self):
         return self.__conditions
 
@@ -33,10 +36,12 @@ class Game:
         pass
 
     def trigger_loss(self):
-        pass
+        import sys
+        sys.exit()
 
     def trigger_victory(self):
-        pass
+        import sys
+        sys.exit()
 
     def set_seconds_remaining(self, seconds_remaining):
         self.__seconds_remaining = seconds_remaining
@@ -72,7 +77,7 @@ class Game:
             component_input_pin = component_data.get('inputPin')
             if component_type == 'BUTTON':
                 self.__components[id] = ButtonComponent(
-                    arduino, component_input_pin)
+                    self.__arduino, component_input_pin)
             else:
                 print('Unrecognized component type [{}]'.format(
                     component_type))
