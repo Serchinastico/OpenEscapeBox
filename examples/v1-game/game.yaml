@@ -1,0 +1,58 @@
+---
+
+title: V1
+description: Don't push the button!
+author: openescape
+specVersion: 1
+durationSeconds: 60
+actions:
+  hint-available:
+    type: HINT_AVAILABLE
+    config: resources/hints/hint1.png
+  hint-critical:
+    type: HINT_CRITICAL
+    config:
+  game-won:
+    type: GAME_VICTORY
+    config:
+  game-lost:
+    type: GAME_LOSS
+    config:
+conditions:
+  button-pressed:
+    type: BUTTON_PRESSED
+    value: button-1
+  30-seconds-passed-condition:
+    type: SECONDS_REMAINING
+    value: 30
+  45-seconds-passed-condition:
+    type: SECONDS_REMAINING
+    value: 45
+  60-seconds-passed-condition:
+    type: SECONDS_REMAINING
+    value: 60
+checkpoints:
+triggers:
+  - enableConditionId:
+    disableConditionId: button-pressed
+    triggerConditionId: 30-seconds-passed-condition
+    actionIds: [hint-available]
+  - enableConditionId:
+    disableConditionId: button-pressed
+    triggerConditionId: 45-seconds-passed-condition
+    actionIds: [hint-critical]
+  - enableConditionId:
+    disableConditionId:
+    triggerConditionId: button-pressed
+    actionIds: [game-won]
+  - enableConditionId:
+    disableConditionId:
+    triggerConditionId: 60-seconds-passed-condition
+    actionIds: [game-lost]
+components:
+  - id: button-1
+    type: button
+    device: /dev/tty1
+    inputPin: d3
+
+...
