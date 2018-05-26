@@ -52,7 +52,7 @@ triggers:
 components:
   - id: button-1
     type: button
-    device: /dev/tty1
+    device: /dev/ttyACM0
     inputPin: d3
 
 ...
