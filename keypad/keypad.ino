@@ -10,7 +10,7 @@ char keymap[numRows][numCols] =
         {'7', '8', '9', 'C'},
         {'*', '0', '#', 'D'}};
 
-byte colPins[numRows] = {9, 8, 7, 6}; //Rows 0 to 3
+byte colPins[numRows] = {6, 7, 8, 9}; //Rows 0 to 3
 byte rowPins[numCols] = {5, 4, 3, 2}; //Columns 0 to 3
 
 Keypad keypad = Keypad(makeKeymap(keymap), rowPins, colPins, numRows, numCols);
