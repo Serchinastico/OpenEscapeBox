@@ -52,7 +52,6 @@ triggers:
 components:
   button-1:
     type: BUTTON
-    device: /dev/ttyACM0
     inputPin: d3
 
 ...

@@ -1,12 +1,17 @@
 class Component(object):
-    pass
+    def update(self):
+        pass
 
 
 class ButtonComponent(Component):
-    def __init__(self, arduino, device, input_pin):
+    def __init__(self, arduino, input_pin):
         self.__arduino = arduino
-        self.__device = device
         self.__input_pin = input_pin
+        self.__was_pressed = False
+
+    def update(self):
+        self.__was_pressed = self.__was_pressed or self.__arduino.read(
+            self.__input_pin) == b'1'
 
     def was_pressed(self):
-        return False
+        return self.__was_pressed

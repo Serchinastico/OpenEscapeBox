@@ -69,11 +69,10 @@ class Game:
                 print('Duplicated component [{}]'.format(id))
 
             component_type = component_data.get('type')
-            component_device = component_data.get('device')
             component_input_pin = component_data.get('inputPin')
             if component_type == 'BUTTON':
                 self.__components[id] = ButtonComponent(
-                    arduino, component_device, component_input_pin)
+                    arduino, component_input_pin)
             else:
                 print('Unrecognized component type [{}]'.format(
                     component_type))
