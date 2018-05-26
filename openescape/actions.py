@@ -14,5 +14,5 @@ class TurnLightOnAction(Action):
     	if environment.is_development:
     		print('Turn light on')
     	else:
-    		self.connection.write("d13=1")
+    		self.connection.write(b'd13=1\n')
     		self.connection.flush()
