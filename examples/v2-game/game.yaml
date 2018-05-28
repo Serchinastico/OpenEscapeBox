@@ -1,0 +1,73 @@
+---
+
+title: V1
+description: Don't push the button!
+author: openescape
+specVersion: 1
+durationSeconds: 20
+actions:
+  hint-available:
+    type: HINT_AVAILABLE
+    config: resources/hints/hint1.png
+  blink-led:
+    type: BLINK_LED
+    config: led-1
+  hint-critical:
+    type: HINT_CRITICAL
+    config:
+  game-won:
+    type: GAME_VICTORY
+    config:
+  game-lost:
+    type: GAME_LOSS
+    config:
+conditions:
+  button-pressed-with-led-on:
+    type: AND
+    value: [button-pressed, led-on]
+  button-pressed:
+    type: BUTTON_PRESSED
+    value: button-1
+  led-on:
+    type: LED_ON
+    value: led-1
+  10-seconds-remaining-condition:
+    type: SECONDS_REMAINING
+    value: 10
+  5-seconds-remaining-condition:
+    type: SECONDS_REMAINING
+    value: 5
+  0-seconds-remaining-condition:
+    type: SECONDS_REMAINING
+    value: 0
+checkpoints:
+triggers:
+  - enableConditionId:
+    disableConditionId: button-pressed-with-led-on
+    triggerConditionId: 10-seconds-remaining-condition
+    actionIds: [hint-available]
+  - enableConditionId:
+    disableConditionId: button-pressed-with-led-on
+    triggerConditionId: 5-seconds-remaining-condition
+    actionIds: [hint-critical]
+  - enableConditionId:
+    disableConditionId: button-pressed-with-led-on
+    triggerConditionId:
+    actionIds: [blink-led]
+  - enableConditionId:
+    disableConditionId:
+    triggerConditionId: button-pressed-with-led-on
+    actionIds: [game-won]
+  - enableConditionId:
+    disableConditionId:
+    triggerConditionId: 0-seconds-remaining-condition
+    actionIds: [game-lost]
+components:
+  button-1:
+    type: BUTTON
+    inputPin: d12
+  led-1:
+    type: LED
+    outputPin: d13
+
+...
