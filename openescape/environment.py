@@ -1,4 +1,5 @@
 class Environment(object):
-	is_development = False
+    is_development = False
+
 
 environment = Environment()

@@ -6,15 +6,15 @@ from openescape.game import Game
 
 class Engine(object):
     def __init__(self, arduino):
-        self.clock = pygame.time.Clock()
         self.__arduino = arduino
 
     def start_game(self, game_config):
-        self.__game = Game(game_config, self.__arduino)
+        clock = pygame.time.Clock()
+        game = Game(game_config, self.__arduino)
         on_frame_listeners = [
-            GameComponentUpdater(self.__game),
-            GameDurationUpdater(self.__game),
-            GameTriggerEvaluator(self.__game),
+            GameComponentUpdater(game),
+            GameDurationUpdater(game),
+            GameTriggerEvaluator(game),
             PyGameEventProcessor(),
         ]
 
@@ -23,7 +23,7 @@ class Engine(object):
             for listener in on_frame_listeners:
                 listener.on_frame()
 
-            self.clock.tick(60)
+            clock.tick(60)
 
 
 class OnFrameListener(object):
