@@ -1,5 +1,6 @@
 import pygame
 import sys
+import time
 import timer
 from openescape.game import Game
 
@@ -20,8 +21,9 @@ class Engine(object):
         self.countdown_timer.start()
 
         on_frame_listeners = [
+            GameComponentUpdater(self.__game),
+            GameDurationUpdater(self.__game),
             PyGameEventProcessor(),
-            GameComponentUpdater(self.__game)
         ]
 
         while True:
@@ -31,10 +33,6 @@ class Engine(object):
             self.clock.tick(60)
 
     def on_tick(self, data):
-        seconds_remaining = data['remaining_time_ms'] // 1000
-        self.__game.set_seconds_remaining(seconds_remaining)
-
-        print('Time remaining: {} seconds'.format(seconds_remaining))
         for trigger in self.__game.triggers():
             trigger.evaluate()
 
@@ -51,6 +49,26 @@ class GameComponentUpdater(OnFrameListener):
     def on_frame(self):
         for component in self.__game.components().values():
             component.update()
+
+
+class GameDurationUpdater(OnFrameListener):
+    def __init__(self, game):
+        self.__game = game
+        self.__game_duration_seconds = game.seconds_remaining()
+        self.__first_frame_time = None
+        self.__seconds_remaining = None
+
+    def on_frame(self):
+        if self.__first_frame_time is None:
+            self.__first_frame_time = time.time()
+
+        seconds_remaining = self.__game_duration_seconds - \
+            int(time.time() - self.__first_frame_time)
+
+        if seconds_remaining != self.__seconds_remaining:
+            self.__seconds_remaining = seconds_remaining
+            self.__game.set_seconds_remaining(seconds_remaining)
+            print('Time remaining: {} seconds'.format(seconds_remaining))
 
 
 class PyGameEventProcessor(OnFrameListener):
