@@ -1,3 +1,4 @@
+import logging
 import pygame
 import sys
 import time
@@ -19,7 +20,7 @@ class Engine(object):
             PyGameEventProcessor(game),
         ]
 
-        print('Starting game [{}]'.format(game_config.title()))
+        logging.info('Starting game [{}]'.format(game_config.title()))
         while not game.is_finished():
             for listener in on_frame_listeners:
                 listener.on_frame()
@@ -47,8 +48,8 @@ class FpsMeter(OnFrameListener):
         self.__num_frames += 1
 
         if time.time() - self.__last_measure_time >= 1:
-            print('Game running at {} FPS, or {:.2f} ms/frame'.format(self.__num_frames,
-                                                                      1000 / self.__num_frames))
+            logging.debug('Game running at {} FPS, or {:.2f} ms/frame'.format(self.__num_frames,
+                                                                              1000 / self.__num_frames))
             self.__num_frames = 0
             self.__last_measure_time += 1
 
@@ -79,7 +80,7 @@ class GameDurationUpdater(OnFrameListener):
         if seconds_remaining != self.__seconds_remaining:
             self.__seconds_remaining = seconds_remaining
             self.__game.set_seconds_remaining(seconds_remaining)
-            print('Time remaining: {} seconds'.format(seconds_remaining))
+            logging.info('Time remaining: {} seconds'.format(seconds_remaining))
 
 
 class GameTriggerEvaluator(OnFrameListener):

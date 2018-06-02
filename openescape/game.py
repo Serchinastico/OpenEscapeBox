@@ -1,3 +1,4 @@
+import logging
 from openescape.actions import *
 from openescape.components import *
 from openescape.conditions import *
@@ -52,7 +53,7 @@ class Game:
         self.__actions = {}
         for id, action_data in self.__game_config.actions().items():
             if id in self.__actions:
-                print('Duplicated action [{}]'.format(id))
+                logging.warning('Duplicated action [{}]'.format(id))
 
             action_type = action_data.get('type')
             action_config = action_data.get('config')
@@ -67,13 +68,13 @@ class Game:
             elif action_type == 'TURN_LIGHT_ON':
                 self.__actions[id] = TurnLightOnAction(self, action_config)
             else:
-                print('Unrecognized action type [{}]'.format(action_type))
+                logging.error('Unrecognized action type [{}]'.format(action_type))
 
     def __init_components(self):
         self.__components = {}
         for id, component_data in self.__game_config.components().items():
             if id in self.__components:
-                print('Duplicated component [{}]'.format(id))
+                logging.warning('Duplicated component [{}]'.format(id))
 
             component_type = component_data.get('type')
             component_input_pin = component_data.get('inputPin')
@@ -81,14 +82,14 @@ class Game:
                 self.__components[id] = ButtonComponent(
                     self.__arduino, component_input_pin)
             else:
-                print('Unrecognized component type [{}]'.format(
+                logging.error('Unrecognized component type [{}]'.format(
                     component_type))
 
     def __init_conditions(self):
         self.__conditions = {}
         for id, condition_data in self.__game_config.conditions().items():
             if id in self.__conditions:
-                print('Duplicated condition [{}]'.format(id))
+                logging.warning('Duplicated condition [{}]'.format(id))
 
             condition_type = condition_data.get('type')
             condition_value = condition_data.get('value')
@@ -99,7 +100,7 @@ class Game:
                 self.__conditions[id] = SecondsRemainingCondition(
                     self, condition_value)
             else:
-                print('Unrecognized condition type [{}]'.format(
+                logging.error('Unrecognized condition type [{}]'.format(
                     condition_type))
 
     def __init_triggers(self):

@@ -1,6 +1,8 @@
+import logging
 import openescape
 import pygame
 
+logging.basicConfig(level=logging.DEBUG, format='%(message)s')
 openescape.environment.is_development = True
 
 pygame.init()

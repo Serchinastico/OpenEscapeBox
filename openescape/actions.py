@@ -1,3 +1,4 @@
+import logging
 import serial
 from openescape.environment import environment
 
@@ -15,7 +16,7 @@ class GameVictoryAction(Action):
         self.__game = game
 
     def execute(self):
-        print('Game victory!')
+        logging.info('Game victory!')
         self.__game.trigger_victory()
 
 
@@ -24,7 +25,7 @@ class GameLossAction(Action):
         self.__game = game
 
     def execute(self):
-        print('Game lost :(')
+        logging.info('Game lost :(')
         self.__game.trigger_loss()
 
 
@@ -34,7 +35,7 @@ class HintAvailableAction(Action):
         self.__image_url = image_url
 
     def execute(self):
-        print('Make hint available [{}]'.format(self.__image_url))
+        logging.info('Make hint available [{}]'.format(self.__image_url))
         self.__game.set_hint_available(self.__image_url)
 
 
@@ -43,7 +44,7 @@ class HintCriticalAction(Action):
         self.__game = game
 
     def execute(self):
-        print('Make hint critical')
+        logging.info('Make hint critical')
         self.__game.set_hint_critical()
 
 
@@ -53,7 +54,7 @@ class TurnLightOnAction(Action):
             self.connection = serial.Serial('/dev/ttyACM0', 57600)
 
     def execute(self):
-        print('Turn light on')
+        logging.info('Turn light on')
 
         if not environment.is_development:
             self.connection.write(b'd13=1\n')
