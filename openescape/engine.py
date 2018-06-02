@@ -19,10 +19,11 @@ class Engine(object):
         print('Starting game [{}]'.format(game_config.title()))
         self.countdown_timer.start()
 
+        on_frame_listeners = [PyGameEventProcessor()]
+
         while True:
-            for event in pygame.event.get():
-                if (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE) or event.type == pygame.QUIT:
-                    self.exit()
+            for listener in on_frame_listeners:
+                listener.on_frame()
 
             for component in self.__game.components().values():
                 component.update()
@@ -37,6 +38,15 @@ class Engine(object):
         for trigger in self.__game.triggers():
             trigger.evaluate()
 
-    def exit(self):
-        pygame.quit()
-        sys.exit()
+
+class OnFrameListener(object):
+    def on_frame(self):
+        pass
+
+
+class PyGameEventProcessor(OnFrameListener):
+    def on_frame(self):
+        for event in pygame.event.get():
+            if (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE) or event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
