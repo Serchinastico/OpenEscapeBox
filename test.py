@@ -1,7 +1,5 @@
 import openescape
 import pygame
-import timer
-import time
 
 openescape.environment.is_development = True
 

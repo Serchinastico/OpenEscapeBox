@@ -1,7 +1,6 @@
 import pygame
 import sys
 import time
-import timer
 from openescape.game import Game
 
 
