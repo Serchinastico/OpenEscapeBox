@@ -12,29 +12,19 @@ class Engine(object):
 
     def start_game(self, game_config):
         self.__game = Game(game_config, self.__arduino)
-
-        self.countdown_timer = timer.CountdownTimer(
-            game_config.duration_seconds() * 1000)
-        self.countdown_timer.subscribe(self)
-
-        print('Starting game [{}]'.format(game_config.title()))
-        self.countdown_timer.start()
-
         on_frame_listeners = [
             GameComponentUpdater(self.__game),
             GameDurationUpdater(self.__game),
+            GameTriggerEvaluator(self.__game),
             PyGameEventProcessor(),
         ]
 
+        print('Starting game [{}]'.format(game_config.title()))
         while True:
             for listener in on_frame_listeners:
                 listener.on_frame()
 
             self.clock.tick(60)
-
-    def on_tick(self, data):
-        for trigger in self.__game.triggers():
-            trigger.evaluate()
 
 
 class OnFrameListener(object):
@@ -69,6 +59,15 @@ class GameDurationUpdater(OnFrameListener):
             self.__seconds_remaining = seconds_remaining
             self.__game.set_seconds_remaining(seconds_remaining)
             print('Time remaining: {} seconds'.format(seconds_remaining))
+
+
+class GameTriggerEvaluator(OnFrameListener):
+    def __init__(self, game):
+        self.__game = game
+
+    def on_frame(self):
+        for trigger in self.__game.triggers():
+            trigger.evaluate()
 
 
 class PyGameEventProcessor(OnFrameListener):
