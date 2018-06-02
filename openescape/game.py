@@ -9,6 +9,7 @@ class Game:
         self.__game_config = game_config
         self.__arduino = arduino
         self.__seconds_remaining = game_config.duration_seconds()
+        self.__is_finished = False
         self.__init_actions()
         self.__init_components()
         self.__init_conditions()
@@ -26,6 +27,9 @@ class Game:
     def triggers(self):
         return self.__triggers
 
+    def is_finished(self):
+        return self.__is_finished
+
     def seconds_remaining(self):
         return self.__seconds_remaining
 
@@ -36,12 +40,10 @@ class Game:
         pass
 
     def trigger_loss(self):
-        import sys
-        sys.exit()
+        self.__is_finished = True
 
     def trigger_victory(self):
-        import sys
-        sys.exit()
+        self.__is_finished = True
 
     def set_seconds_remaining(self, seconds_remaining):
         self.__seconds_remaining = seconds_remaining

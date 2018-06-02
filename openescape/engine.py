@@ -16,15 +16,18 @@ class Engine(object):
             GameDurationUpdater(game),
             GameTriggerEvaluator(game),
             FpsMeter(),
-            PyGameEventProcessor(),
+            PyGameEventProcessor(game),
         ]
 
         print('Starting game [{}]'.format(game_config.title()))
-        while True:
+        while not game.is_finished():
             for listener in on_frame_listeners:
                 listener.on_frame()
 
             clock.tick(60)
+
+        pygame.quit()
+        sys.exit()
 
 
 class OnFrameListener(object):
@@ -45,7 +48,7 @@ class FpsMeter(OnFrameListener):
 
         if time.time() - self.__last_measure_time >= 1:
             print('Game running at {} FPS, or {:.2f} ms/frame'.format(self.__num_frames,
-                                                                  1000 / self.__num_frames))
+                                                                      1000 / self.__num_frames))
             self.__num_frames = 0
             self.__last_measure_time += 1
 
@@ -89,8 +92,10 @@ class GameTriggerEvaluator(OnFrameListener):
 
 
 class PyGameEventProcessor(OnFrameListener):
+    def __init__(self, game):
+        self.__game = game
+
     def on_frame(self):
         for event in pygame.event.get():
             if (event.type == pygame.KEYUP and event.key == pygame.K_ESCAPE) or event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                self.__game.trigger_loss()
