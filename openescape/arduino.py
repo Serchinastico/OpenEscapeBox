@@ -1,9 +1,11 @@
 import serial
+from openescape.environment import environment
 
 
 class Arduino(object):
     def __init__(self):
-        self.__connection = serial.Serial('/dev/ttyACM0', 57600)
+        if not environment.is_development:
+            self.__connection = serial.Serial('/dev/ttyACM0', 57600)
 
     def read(self, pin):
         self.__connection.write('print {}\n'.format(pin).encode('utf-8'))

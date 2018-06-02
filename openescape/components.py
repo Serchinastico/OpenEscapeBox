@@ -1,3 +1,6 @@
+from openescape.environment import environment
+
+
 class Component(object):
     def update(self):
         pass
@@ -10,8 +13,9 @@ class ButtonComponent(Component):
         self.__was_pressed = False
 
     def update(self):
-        read_value = self.__arduino.read(self.__input_pin)
-        self.__was_pressed = self.__was_pressed or read_value == b'1'
+        if not environment.is_development:
+            read_value = self.__arduino.read(self.__input_pin)
+            self.__was_pressed = self.__was_pressed or read_value == b'1'
 
     def was_pressed(self):
         return self.__was_pressed
