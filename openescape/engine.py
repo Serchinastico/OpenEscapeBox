@@ -19,14 +19,14 @@ class Engine(object):
         print('Starting game [{}]'.format(game_config.title()))
         self.countdown_timer.start()
 
-        on_frame_listeners = [PyGameEventProcessor()]
+        on_frame_listeners = [
+            PyGameEventProcessor(),
+            GameComponentUpdater(self.__game)
+        ]
 
         while True:
             for listener in on_frame_listeners:
                 listener.on_frame()
-
-            for component in self.__game.components().values():
-                component.update()
 
             self.clock.tick(60)
 
@@ -42,6 +42,15 @@ class Engine(object):
 class OnFrameListener(object):
     def on_frame(self):
         pass
+
+
+class GameComponentUpdater(OnFrameListener):
+    def __init__(self, game):
+        self.__game = game
+
+    def on_frame(self):
+        for component in self.__game.components().values():
+            component.update()
 
 
 class PyGameEventProcessor(OnFrameListener):
