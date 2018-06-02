@@ -15,6 +15,7 @@ class Engine(object):
             GameComponentUpdater(game),
             GameDurationUpdater(game),
             GameTriggerEvaluator(game),
+            FpsMeter(),
             PyGameEventProcessor(),
         ]
 
@@ -29,6 +30,24 @@ class Engine(object):
 class OnFrameListener(object):
     def on_frame(self):
         pass
+
+
+class FpsMeter(OnFrameListener):
+    def __init__(self):
+        self.__num_frames = 0
+        self.__last_measure_time = None
+
+    def on_frame(self):
+        if self.__last_measure_time is None:
+            self.__last_measure_time = time.time()
+
+        self.__num_frames += 1
+
+        if time.time() - self.__last_measure_time >= 1:
+            print('Game running at {} FPS, or {:.2f} ms/frame'.format(self.__num_frames,
+                                                                  1000 / self.__num_frames))
+            self.__num_frames = 0
+            self.__last_measure_time += 1
 
 
 class GameComponentUpdater(OnFrameListener):
