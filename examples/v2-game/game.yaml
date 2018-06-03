@@ -1,6 +1,6 @@
 ---
 
-title: V1
+title: V2
 description: Don't push the button!
 author: openescape
 specVersion: 1
@@ -23,7 +23,7 @@ actions:
     config:
 conditions:
   button-pressed-with-led-on:
-    type: AND
+    type: ALL
     value: [button-pressed, led-on]
   button-pressed:
     type: BUTTON_PRESSED
@@ -31,13 +31,13 @@ conditions:
   led-on:
     type: LED_ON
     value: led-1
-  10-seconds-remaining-condition:
+  10-seconds-remaining:
     type: SECONDS_REMAINING
     value: 10
-  5-seconds-remaining-condition:
+  5-seconds-remaining:
     type: SECONDS_REMAINING
     value: 5
-  0-seconds-remaining-condition:
+  0-seconds-remaining:
     type: SECONDS_REMAINING
     value: 0
 checkpoints:
