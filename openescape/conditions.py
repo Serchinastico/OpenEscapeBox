@@ -3,6 +3,10 @@ class Condition(object):
         return False
 
 
+class AllCondition(Condition):
+    pass
+
+
 class AlwaysFalseCondition(Condition):
     def is_true(self):
         return False
@@ -20,6 +24,10 @@ class ButtonPressedCondition(Condition):
 
     def is_true(self):
         return self.__button.was_pressed()
+
+
+class LedOnCondition(Condition):
+    pass
 
 
 class SecondsRemainingCondition(Condition):

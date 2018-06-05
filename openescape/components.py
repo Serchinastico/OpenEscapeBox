@@ -19,3 +19,7 @@ class ButtonComponent(Component):
 
     def was_pressed(self):
         return self.__was_pressed
+
+
+class LedComponent(Component):
+    pass

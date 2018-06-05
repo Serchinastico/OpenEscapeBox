@@ -11,6 +11,11 @@ class Action(object):
         pass
 
 
+class BlinkLedAction(Action):
+    def __init__(self):
+        pass
+
+
 class GameVictoryAction(Action):
     def __init__(self, game, config):
         self.__game = game

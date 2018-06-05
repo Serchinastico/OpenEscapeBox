@@ -30,7 +30,9 @@ class ActionFactory(object):
 
             action_type = data.get('type')
             action_config = data.get('config')
-            if action_type == 'GAME_LOSS':
+            if action_type == 'BLINK_LED':
+                actions[id] = BlinkLedAction()
+            elif action_type == 'GAME_LOSS':
                 actions[id] = GameLossAction(game, action_config)
             elif action_type == 'GAME_VICTORY':
                 actions[id] = GameVictoryAction(game, action_config)
@@ -59,6 +61,8 @@ class ComponentFactory(object):
             component_input_pin = data.get('inputPin')
             if component_type == 'BUTTON':
                 components[id] = ButtonComponent(arduino, component_input_pin)
+            elif component_type == 'LED':
+                components[id] = LedComponent()
             else:
                 raise ValueError(
                     'Unrecognized component type [{}]'.format(component_type))
@@ -76,9 +80,13 @@ class ConditionFactory(object):
 
             condition_type = data.get('type')
             condition_value = data.get('value')
-            if condition_type == 'BUTTON_PRESSED':
+            if condition_type == 'ALL':
+                conditions[id] = AllCondition()
+            elif condition_type == 'BUTTON_PRESSED':
                 conditions[id] = ButtonPressedCondition(
                     game, game.components[condition_value])
+            elif condition_type == 'LED_ON':
+                conditions[id] = LedOnCondition()
             elif condition_type == 'SECONDS_REMAINING':
                 conditions[id] = SecondsRemainingCondition(
                     game, condition_value)
