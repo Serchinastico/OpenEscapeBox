@@ -11,6 +11,6 @@ arduino = openescape.Arduino()
 
 game_config = openescape.GameConfig.from_yaml_config_file_path(
     'examples/v2-game/game.yaml')
-game_engine = openescape.Engine(arduino)
-
-game_engine.start_game(game_config)
+game = openescape.GameFactory.from_config(game_config, arduino)
+game_engine = openescape.Engine()
+game_engine.start_game(game)

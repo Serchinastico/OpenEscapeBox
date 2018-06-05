@@ -6,12 +6,8 @@ from openescape.game import Game
 
 
 class Engine(object):
-    def __init__(self, arduino):
-        self.__arduino = arduino
-
-    def start_game(self, game_config):
+    def start_game(self, game):
         clock = pygame.time.Clock()
-        game = Game(game_config, self.__arduino)
         on_frame_listeners = [
             GameComponentUpdater(game),
             GameDurationUpdater(game),
@@ -20,7 +16,7 @@ class Engine(object):
             PyGameEventProcessor(game),
         ]
 
-        logging.info('Starting game [{}]'.format(game_config.title()))
+        logging.info('Starting game')
         while not game.is_finished():
             for listener in on_frame_listeners:
                 listener.on_frame()
@@ -59,7 +55,7 @@ class GameComponentUpdater(OnFrameListener):
         self.__game = game
 
     def on_frame(self):
-        for component in self.__game.components().values():
+        for component in self.__game.components.values():
             component.update()
 
 
@@ -88,7 +84,7 @@ class GameTriggerEvaluator(OnFrameListener):
         self.__game = game
 
     def on_frame(self):
-        for trigger in self.__game.triggers():
+        for trigger in self.__game.triggers:
             trigger.evaluate()
 
 
