@@ -41,7 +41,7 @@ class ActionFactory(object):
             elif action_type == 'TURN_LIGHT_ON':
                 actions[id] = TurnLightOnAction(game, action_config)
             else:
-                logging.error(
+                raise ValueError(
                     'Unrecognized action type [{}]'.format(action_type))
 
         return actions
@@ -60,8 +60,8 @@ class ComponentFactory(object):
             if component_type == 'BUTTON':
                 components[id] = ButtonComponent(arduino, component_input_pin)
             else:
-                logging.error('Unrecognized component type [{}]'.format(
-                    component_type))
+                raise ValueError(
+                    'Unrecognized component type [{}]'.format(component_type))
 
         return components
 
@@ -83,7 +83,7 @@ class ConditionFactory(object):
                 conditions[id] = SecondsRemainingCondition(
                     game, condition_value)
             else:
-                logging.error(
+                raise ValueError(
                     'Unrecognized condition type [{}]'.format(condition_type))
 
         return conditions
