@@ -1,3 +1,4 @@
+from functools import partial
 from openescape.actions import *
 from openescape.components import *
 from openescape.conditions import *
@@ -98,18 +99,39 @@ class ConditionFactory(object):
 
 
 class TriggerFactory(object):
-    @staticmethod
-    def from_config(triggers_config, game):
+    @classmethod
+    def from_config(cls, triggers_config, game):
         triggers = []
         for data in triggers_config:
-            enable_condition = game.conditions.get(
-                data['enableConditionId'], AlwaysTrueCondition())
-            disable_condition = game.conditions.get(
-                data['disableConditionId'], AlwaysFalseCondition())
-            trigger_condition = game.conditions.get(
-                data['triggerConditionId'], AlwaysTrueCondition())
-            actions = map(game.actions.get, data['actionIds'])
+            enable_condition = cls.__resolve_condition(
+                game, data, 'enableConditionId', AlwaysTrueCondition())
+            disable_condition = cls.__resolve_condition(
+                game, data, 'disableConditionId', AlwaysFalseCondition())
+            trigger_condition = cls.__resolve_condition(
+                game, data, 'triggerConditionId', AlwaysTrueCondition())
+            actions = list(
+                map(partial(cls.__resolve_action, game), data['actionIds']))
             triggers.append(
                 Trigger(enable_condition, disable_condition, trigger_condition, actions))
 
         return triggers
+
+    @staticmethod
+    def __resolve_action(game, action_id):
+        if action_id not in game.actions:
+            raise ValueError('Undefined action id [{}]'.format(action_id))
+
+        return game.actions[action_id]
+
+    @staticmethod
+    def __resolve_condition(game, trigger_config, config_key, condition_if_none):
+        condition_id = trigger_config[config_key]
+
+        if condition_id is None:
+            return condition_if_none
+        else:
+            if condition_id not in game.conditions:
+                raise ValueError(
+                    'Undefined condition id [{}]'.format(condition_id))
+
+            return game.conditions[condition_id]

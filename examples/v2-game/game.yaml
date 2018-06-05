@@ -44,11 +44,11 @@ checkpoints:
 triggers:
   - enableConditionId:
     disableConditionId: button-pressed-with-led-on
-    triggerConditionId: 10-seconds-remaining-condition
+    triggerConditionId: 10-seconds-remaining
     actionIds: [hint-available]
   - enableConditionId:
     disableConditionId: button-pressed-with-led-on
-    triggerConditionId: 5-seconds-remaining-condition
+    triggerConditionId: 5-seconds-remaining
     actionIds: [hint-critical]
   - enableConditionId:
     disableConditionId: button-pressed-with-led-on
@@ -60,7 +60,7 @@ triggers:
     actionIds: [game-won]
   - enableConditionId:
     disableConditionId:
-    triggerConditionId: 0-seconds-remaining-condition
+    triggerConditionId: 0-seconds-remaining
     actionIds: [game-lost]
 components:
   button-1:
