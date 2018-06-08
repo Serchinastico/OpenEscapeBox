@@ -4,7 +4,11 @@ class Condition(object):
 
 
 class AllCondition(Condition):
-    pass
+    def __init__(self, conditions):
+        self.__conditions = conditions
+
+    def is_true(self):
+        return all(condition.is_true() for condition in self.__conditions)
 
 
 class AlwaysFalseCondition(Condition):
@@ -15,6 +19,14 @@ class AlwaysFalseCondition(Condition):
 class AlwaysTrueCondition(Condition):
     def is_true(self):
         return True
+
+
+class AnyCondition(Condition):
+    def __init__(self, conditions):
+        self.__conditions = conditions
+
+    def is_true(self):
+        return any(condition.is_true() for condition in self.__conditions)
 
 
 class ButtonPressedCondition(Condition):

@@ -1,3 +1,4 @@
+import networkx as nx
 from functools import partial
 from openescape.actions import *
 from openescape.components import *
@@ -72,17 +73,24 @@ class ComponentFactory(object):
 
 
 class ConditionFactory(object):
-    @staticmethod
-    def from_config(conditions_config, game):
+    @classmethod
+    def from_config(cls, conditions_config, game):
+        sorted_condition_ids = cls.__sort_conditions(conditions_config)
         conditions = {}
-        for id, data in conditions_config.items():
+
+        for id in sorted_condition_ids:
             if id in conditions:
                 logging.warning('Duplicated condition [{}]'.format(id))
 
+            data = conditions_config[id]
             condition_type = data.get('type')
             condition_value = data.get('value')
             if condition_type == 'ALL':
-                conditions[id] = AllCondition()
+                nested_conditions = list(map(conditions.get, condition_value))
+                conditions[id] = AllCondition(nested_conditions)
+            elif condition_type == 'ANY':
+                nested_conditions = list(map(conditions.get, condition_value))
+                conditions[id] = AnyCondition(nested_conditions)
             elif condition_type == 'BUTTON_PRESSED':
                 conditions[id] = ButtonPressedCondition(
                     game, game.components[condition_value])
@@ -96,6 +104,27 @@ class ConditionFactory(object):
                     'Unrecognized condition type [{}]'.format(condition_type))
 
         return conditions
+
+    @staticmethod
+    def __sort_conditions(conditions_config):
+        conditions_graph = nx.DiGraph()
+
+        for id, data in conditions_config.items():
+            condition_type = data.get('type')
+            conditions_graph.add_node(id)
+
+            if condition_type in ['ALL', 'ANY']:
+                referenced_conditions = data.get('value')
+
+                for condition_id in referenced_conditions:
+                    conditions_graph.add_edge(condition_id, id)
+
+        cycles = list(nx.algorithms.cycles.simple_cycles(conditions_graph))
+        if cycles:
+            raise ValueError(
+                'There are circular dependencies in the conditions: {}'.format(cycles))
+
+        return list(nx.algorithms.dag.topological_sort(conditions_graph))
 
 
 class TriggerFactory(object):
