@@ -13,7 +13,7 @@ class ButtonComponent(Component):
         self.__was_pressed = False
 
     def update(self):
-        if not environment.is_development:
+        if environment.use_arduino:
             read_value = self.__arduino.read(self.__input_pin)
             self.__was_pressed = self.__was_pressed or read_value == b'1'
 

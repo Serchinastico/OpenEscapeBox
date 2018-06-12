@@ -1,5 +1,5 @@
 class Environment(object):
-    is_development = False
+    use_arduino = True
 
 
 environment = Environment()

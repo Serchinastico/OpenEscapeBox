@@ -55,12 +55,12 @@ class HintCriticalAction(Action):
 
 class TurnLightOnAction(Action):
     def __init__(self, game, config):
-        if not environment.is_development:
+        if environment.use_arduino:
             self.connection = serial.Serial('/dev/ttyACM0', 57600)
 
     def execute(self):
         logging.info('Turn light on')
 
-        if not environment.is_development:
+        if environment.use_arduino:
             self.connection.write(b'd13=1\n')
             self.connection.flush()

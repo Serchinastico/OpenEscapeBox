@@ -3,7 +3,8 @@ import openescape
 import pygame
 
 logging.basicConfig(level=logging.DEBUG, format='%(message)s')
-openescape.environment.is_development = True
+openescape.environment.use_arduino = True
+
 
 pygame.init()
 

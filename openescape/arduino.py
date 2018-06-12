@@ -4,7 +4,7 @@ from openescape.environment import environment
 
 class Arduino(object):
     def __init__(self):
-        if not environment.is_development:
+        if environment.use_arduino:
             self.__connection = serial.Serial('/dev/ttyACM0', 57600)
 
     def read(self, pin):
