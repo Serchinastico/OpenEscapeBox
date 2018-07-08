@@ -11,9 +11,9 @@ class GameFactory(object):
     @staticmethod
     def from_config(game_config, arduino):
         game = Game(duration_seconds=game_config.duration_seconds())
-        game.actions = ActionFactory.from_config(game_config.actions(), game)
         game.components = ComponentFactory.from_config(
             game_config.components(), arduino)
+        game.actions = ActionFactory.from_config(game_config.actions(), game)
         game.conditions = ConditionFactory.from_config(
             game_config.conditions(), game)
         game.triggers = TriggerFactory.from_config(
@@ -33,7 +33,7 @@ class ActionFactory(object):
             action_type = data.get('type')
             action_config = data.get('config')
             if action_type == 'BLINK_LED':
-                actions[id] = BlinkLedAction()
+                actions[id] = BlinkLedAction(game.components[action_config])
             elif action_type == 'GAME_LOSS':
                 actions[id] = GameLossAction(game, action_config)
             elif action_type == 'GAME_VICTORY':
@@ -61,10 +61,11 @@ class ComponentFactory(object):
 
             component_type = data.get('type')
             component_input_pin = data.get('inputPin')
+            component_output_pin = data.get('outputPin')
             if component_type == 'BUTTON':
                 components[id] = ButtonComponent(arduino, component_input_pin)
             elif component_type == 'LED':
-                components[id] = LedComponent()
+                components[id] = LedComponent(arduino, component_output_pin)
             else:
                 raise ValueError(
                     'Unrecognized component type [{}]'.format(component_type))

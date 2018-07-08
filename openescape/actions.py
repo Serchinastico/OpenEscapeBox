@@ -12,8 +12,11 @@ class Action(object):
 
 
 class BlinkLedAction(Action):
-    def __init__(self):
-        pass
+    def __init__(self, led_component):
+        self.__led_component = led_component
+
+    def execute(self):
+        self.__led_component.blink()
 
 
 class GameVictoryAction(Action):
@@ -56,7 +59,7 @@ class HintCriticalAction(Action):
 class TurnLightOnAction(Action):
     def __init__(self, game, config):
         if environment.use_arduino:
-            self.connection = serial.Serial('/dev/ttyACM0', 57600)
+            self.connection = serial.Serial('/dev/ttys001', 57600)
 
     def execute(self):
         logging.info('Turn light on')

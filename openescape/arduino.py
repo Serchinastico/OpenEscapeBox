@@ -5,7 +5,7 @@ from openescape.environment import environment
 class Arduino(object):
     def __init__(self):
         if environment.use_arduino:
-            self.__connection = serial.Serial('/dev/ttyACM0', 57600)
+            self.__connection = serial.Serial('/dev/ttys000', 57600)
 
     def read(self, pin):
         self.__connection.write('print {}\n'.format(pin).encode('utf-8'))

@@ -1,3 +1,4 @@
+import time
 from openescape.environment import environment
 
 
@@ -22,4 +23,36 @@ class ButtonComponent(Component):
 
 
 class LedComponent(Component):
-    pass
+    def __init__(self, arduino, output_pin):
+        self.__arduino = arduino
+        self.__output_pin = output_pin
+        self.__is_blinking = False
+        self.__is_on = False
+        self.__last_measure_time = None
+
+    def update(self):
+        if self.__is_blinking:
+            if self.__last_measure_time is None:
+                self.__last_measure_time = time.time()
+                self.turn_on()
+
+            if time.time() - self.__last_measure_time >= 1:
+                self.__last_measure_time += 1
+                self.toggle()
+
+    def blink(self):
+        self.__is_blinking = True
+
+    def toggle(self):
+        self.__is_on = not self.__is_on
+        self.__arduino.write(self.__output_pin, 1 if self.__is_on else 0)
+
+    def turn_on(self):
+        self.__is_on = True
+        if environment.use_arduino:
+            self.__arduino.write(self.__output_pin, 1)
+
+    def turn_off(self):
+        self.__is_on = False
+        if environment.use_arduino:
+            self.__arduino.write(self.__output_pin, 0)
