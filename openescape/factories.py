@@ -96,7 +96,8 @@ class ConditionFactory(object):
                 conditions[id] = ButtonPressedCondition(
                     game, game.components[condition_value])
             elif condition_type == 'LED_ON':
-                conditions[id] = LedOnCondition()
+                conditions[id] = LedOnCondition(
+                    game, game.components[condition_value])
             elif condition_type == 'SECONDS_REMAINING':
                 conditions[id] = SecondsRemainingCondition(
                     game, condition_value)

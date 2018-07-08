@@ -35,11 +35,16 @@ class ButtonPressedCondition(Condition):
         self.__button = button
 
     def is_true(self):
-        return self.__button.was_pressed()
+        return self.__button.is_pressed()
 
 
 class LedOnCondition(Condition):
-    pass
+    def __init__(self, game, led):
+        self.__game = game
+        self.__led = led
+
+    def is_true(self):
+        return self.__led.is_on()
 
 
 class SecondsRemainingCondition(Condition):

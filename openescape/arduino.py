@@ -25,3 +25,6 @@ class Arduino(object):
     def write(self, pin, value):
         self.__connection.write('{}={}\n'.format(pin, value).encode('utf-8'))
         self.__connection.flush()
+
+        while self.__connection.read() != b'\n':
+            pass

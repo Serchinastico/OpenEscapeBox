@@ -23,14 +23,16 @@ class Fakeduino(object):
     def read(self, pin):
         if pin not in self.__components:
             print('Trying to read from unattached pin {}'.format(pin))
+            return
 
         return self.__components[pin].value
 
     def write(self, pin, value):
         if pin not in self.__components:
             print('Trying to write to unattached pin {}'.format(pin))
+            return
 
-        pass
+        self.__components[pin].writePin(value)
 
     def run(self):
         sys.exit(self.__app.exec_())

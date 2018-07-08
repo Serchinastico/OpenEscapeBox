@@ -10,6 +10,7 @@ print('Connect to Fakeduino/Bitlash on ' + slave_tty_name)
 
 arduino = fakeduino.Fakeduino()
 arduino.attach(fakeduino.ButtonComponent(), 'd12')
+arduino.attach(fakeduino.LedComponent(), 'd13')
 
 bitlash = fakeduino.bitlash.Bitlash(master_fd, arduino)
 bitlash_thread = threading.Thread(target=bitlash.run, args=())

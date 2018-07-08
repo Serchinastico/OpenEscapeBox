@@ -11,15 +11,14 @@ class ButtonComponent(Component):
     def __init__(self, arduino, input_pin):
         self.__arduino = arduino
         self.__input_pin = input_pin
-        self.__was_pressed = False
+        self.__is_pressed = False
 
     def update(self):
         if environment.use_arduino:
-            read_value = self.__arduino.read(self.__input_pin)
-            self.__was_pressed = self.__was_pressed or read_value == b'1'
+            self.__is_pressed = self.__arduino.read(self.__input_pin) == b'1'
 
-    def was_pressed(self):
-        return self.__was_pressed
+    def is_pressed(self):
+        return self.__is_pressed
 
 
 class LedComponent(Component):
@@ -42,6 +41,9 @@ class LedComponent(Component):
 
     def blink(self):
         self.__is_blinking = True
+
+    def is_on(self):
+        return self.__is_on
 
     def toggle(self):
         self.__is_on = not self.__is_on
