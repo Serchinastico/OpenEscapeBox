@@ -26,6 +26,12 @@ class Fakeduino(object):
 
         return self.__components[pin].value
 
+    def write(self, pin, value):
+        if pin not in self.__components:
+            print('Trying to write to unattached pin {}'.format(pin))
+
+        pass
+
     def run(self):
         sys.exit(self.__app.exec_())
 

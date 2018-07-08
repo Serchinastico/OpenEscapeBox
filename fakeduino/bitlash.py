@@ -11,6 +11,7 @@ class Bitlash(object):
         file = os.fdopen(self.__fd, 'r+')
         commands = [
             ReadPinBitlashCommand,
+            WritePinBitlashCommand,
             UnsupportedBitlashCommand
         ]
 
@@ -60,3 +61,22 @@ class UnsupportedBitlashCommand(BitlashCommand):
     @classmethod
     def handle(cls, request, arduino):
         print('Unsupported command [{}]'.format(request.strip()))
+
+
+class WritePinBitlashCommand(BitlashCommand):
+    COMMAND_RE = re.compile('^{pin}={value}$'.format(
+        pin='\s*(?P<pin>d\d+)\s*',
+        value='\s*(?P<value>[01])\s*'))
+
+    @classmethod
+    def can_handle(cls, request):
+        return cls.COMMAND_RE.match(request)
+
+    @classmethod
+    def handle(cls, request, arduino):
+        matches = cls.COMMAND_RE.match(request)
+        pin = matches.group('pin')
+        value = int(matches.group('value'))
+        result = arduino.write(pin, value)
+        print('Command [{}] returned result [{}]'.format(
+            request.strip(), result))
